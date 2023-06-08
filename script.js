@@ -36,45 +36,65 @@ function playRound(playerSelection, computerSelection) {
             return "You win! Scissors beats paper";
         }
     }
-
 }
 
-function game() {
-    let computerSelection;
-    let playerChoice;
-
-    for (let i = 0; i < 5; i++) {
-        computerSelection = getComputerChoice();
-        playerChoice = prompt("Choose Rock, Paper, or Scissors!");
-        console.log("The computer chose " + computerSelection);
-        console.log(playRound(playerChoice, computerSelection));
-    }
-}
 
 let buttons = document.querySelectorAll("button");
+let gameInProgress = true;
 
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        let computerSelection = getComputerChoice();
-        let playerSelection = button.className;
-        let result = playRound(playerSelection, computerSelection);
+function gameSet() {
+    playerScore = 0, computerScore = 0;
+    setScore("Let's play!", "", "");
 
+    function setScore(result, playerSelection, computerSelection) {
         let player_choice = document.querySelector(".player-choice");
-        player_choice.textContent = `Your choice: ${playerSelection}.`;
         let computer_choice = document.querySelector(".computer-choice");
+
+        player_choice.textContent = `Your choice: ${playerSelection}.`;
         computer_choice.textContent = `Computer choice: ${computerSelection}.`;
+
         let resultDiv = document.querySelector(".message");
-        resultDiv.textContent = "Result: " + result;
+        resultDiv.textContent = result;
 
         let player_score = document.querySelector(".player-score");
         let computer_score = document.querySelector(".computer-score");
         player_score.textContent = `Your score: ${playerScore}`;
         computer_score.textContent = `Computer score: ${computerScore}`;
+    }
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            if (!gameInProgress) {
+                return;
+            }
+
+            let computerSelection = getComputerChoice();
+            let playerSelection = button.className;
+            let result = playRound(playerSelection, computerSelection);
+
+            setScore(result, playerSelection, computerSelection);
+            checkOutcome();
+        });
     });
 }
-);
 
-if (playerScore == 5 || computerScore == 5) {
-    
+gameSet();
 
+
+function checkOutcome() {
+    if (playerScore === 5 || computerScore === 5) {
+        let player_choice = document.querySelector(".player-choice");
+        let computer_choice = document.querySelector(".computer-choice");
+        player_choice.textContent = "";
+        computer_choice.textContent = "";
+
+        let resultDiv = document.querySelector(".message");
+
+        if (playerScore > computerScore) {
+            resultDiv.textContent = "Player wins game!";
+        } else {
+            resultDiv.textContent = "Computer wins game!";
+        }
+        gameInProgress = false;
+    }
 }
