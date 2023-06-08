@@ -40,7 +40,22 @@ function game() {
         console.log("The computer chose " + computerSelection);
         console.log(playRound(playerChoice, computerSelection));
     }
-
 }
 
-game();
+let buttons = document.querySelectorAll("button");
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        let computerSelection = getComputerChoice();
+        let playerSelection = button.className;
+        let result = playRound(playerSelection, computerSelection);
+
+        let player_choice = document.querySelector(".player-choice");
+        player_choice.textContent = `You chose ${playerSelection}.`;
+        let computer_choice = document.querySelector(".computer-choice");
+        computer_choice.textContent = `The computer chose ${computerSelection}.`;
+        let resultDiv = document.querySelector(".message");
+        resultDiv.textContent = result;
+    });
+}
+);
